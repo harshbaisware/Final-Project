@@ -48,6 +48,26 @@
             });
         }
 
+        function editAlert() {
+            swal({
+                title: "You have already Applied",
+                text: "Do you want to Re-apply with new details ?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willEdit) => {
+                    if (willEdit) {
+                        swal("Do you really want to Re-Apply ?", {
+                            icon: "warning",
+                        });
+                    }
+                    else {
+                        window.location = "LoanHomePage.aspx";
+                    }
+                });
+        }
+
         function oopsAlert() {
             swal(
 

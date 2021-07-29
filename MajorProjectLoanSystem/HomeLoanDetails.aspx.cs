@@ -48,36 +48,43 @@ namespace MajorProjectLoanSystem
                 {
                     client.BaseAddress = new Uri("http://trustyloanapi.somee.com/api/");
 
-                    //GET Request LoanAppliedDetails by id
-                    var rT = client.GetAsync("LoanAppliedDetails/" + Convert.ToInt32(Session["USER_ID"]));
+                    //GET Request StatusHome by id
+                    var rT = client.GetAsync("StatusHome/" + Convert.ToInt32(Session["USER_ID"]));
                     rT.Wait();
 
                     var r = rT.Result;
                     if (r.IsSuccessStatusCode)
                     {
-                        //GET by ID methods calling
-                        Personal_Get_Id();
-                        Gstin_Get_Id();
-                        EmpEduHome_Get_Id();
-                        Financial_Get_Id();
-                        PropHome_Get_Id();
-                        HomeDetails_Get_Id();
-                        PropertyDetails_Get_Id();
-                        Reference_Get_Id();
-                        Declar_Get_Id();
-                        HomeAppDoc_Get_Id();
+                        var readTask = r.Content.ReadAsAsync<StatusHomeClass>();
+                        readTask.Wait();
 
-                        RequiredFieldValidator71.Enabled = false;
-                        RequiredFieldValidator72.Enabled = false;
-                        imguploadlbl.Text = "Submitted";
-                        signuploadlbl.Text = "Submitted";
+                        var edit = readTask.Result;
 
-                        RequiredFieldValidator6.Enabled = false;
-                        lbl8Identity.Text = "Submitted";
+                        if(edit.Home_Status == "Pending")
+                        {
+                            //Alert for Editing Details
+                            ClientScript.RegisterStartupScript(this.GetType(), "randomtext", "editAlert()", true);
+
+                            //GET by ID methods calling
+                            //Personal_Get_Id();
+                            //Gstin_Get_Id();
+                            //EmpEduHome_Get_Id();
+                            //Financial_Get_Id();
+                            //PropHome_Get_Id();
+                            //HomeDetails_Get_Id();
+                            //PropertyDetails_Get_Id();
+                            //Reference_Get_Id();
+                            //Declar_Get_Id();
+                            //HomeAppDoc_Get_Id();
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {
-
+                        
                     }
                 }
             }
@@ -263,8 +270,8 @@ namespace MajorProjectLoanSystem
             {
                 client.BaseAddress = new Uri("http://trustyloanapi.somee.com/api/");
 
-                //GET Request LoanAppliedDetails by id
-                var rT = client.GetAsync("LoanAppliedDetails/" + Convert.ToInt32(Session["USER_ID"]));
+                //GET Request StatusHome by id
+                var rT = client.GetAsync("StatusHome/" + Convert.ToInt32(Session["USER_ID"]));
                 rT.Wait();
 
                 var r = rT.Result;
@@ -355,12 +362,12 @@ namespace MajorProjectLoanSystem
 
                     var personal = readTask.Result;
 
-                    var app_name = personal.App_Name.Split(' ');
-                    var app_fath_spou_name = personal.App_Fath_Spou_Name.Split(' ');
-                    var app_mother_name = personal.App_Mother_Name.Split(' ');
-                    var app_religion = personal.App_Religion.Split(' ');
-                    var app_category = personal.App_Category.Split(' ');
-                    var app_education = personal.App_Education.Split(' ');
+                    var app_name = personal.App_Name.Split('_');
+                    var app_fath_spou_name = personal.App_Fath_Spou_Name.Split('_');
+                    var app_mother_name = personal.App_Mother_Name.Split('_');
+                    var app_religion = personal.App_Religion.Split('_');
+                    var app_category = personal.App_Category.Split('_');
+                    var app_education = personal.App_Education.Split('_');
 
                     txt1ApplicantFirst.Text = app_name[0];
                     txt1ApplicantMiddle.Text = app_name[1];

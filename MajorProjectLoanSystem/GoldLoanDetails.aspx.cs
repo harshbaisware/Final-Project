@@ -32,37 +32,39 @@ namespace MajorProjectLoanSystem
                 {
                     client.BaseAddress = new Uri("http://trustyloanapi.somee.com/api/");
 
-                    //GET Request LoanAppliedDetails by id
-                    var rT = client.GetAsync("LoanAppliedDetails/" + Convert.ToInt32(Session["USER_ID"]));
+                    //GET Request StatusHome by id
+                    var rT = client.GetAsync("StatusHome/" + Convert.ToInt32(Session["USER_ID"]));
                     rT.Wait();
 
                     var r = rT.Result;
                     if (r.IsSuccessStatusCode)
                     {
-                        //GET by ID methods calling
-                        Personal_Get_Id();
-                        Gstin_Get_Id();
-                        EmpGold_Get_Id();
-                        PropGold_Get_Id();
-                        PurpGold_Get_Id();
-                        Nominee_Get_Id();
-                        Declar_Get_Id();
-                        GoldAppDoc_Get_Id();
+                        var readTask = r.Content.ReadAsAsync<StatusHomeClass>();
+                        readTask.Wait();
 
-                        RequiredFieldValidator71.Enabled = false;
-                        RequiredFieldValidator72.Enabled = false;
-                        imguploadlbl.Text = "Submitted";
-                        signuploadlbl.Text = "Submitted";
+                        var edit = readTask.Result;
 
-                        RequiredFieldValidator22.Enabled = false;
-                        RequiredFieldValidator23.Enabled = false;
-                        RequiredFieldValidator28.Enabled = false;
-                        RequiredFieldValidator1.Enabled = false;
-                        RequiredFieldValidator24.Enabled = false;
-                        RequiredFieldValidator2.Enabled = false;
-                        lbl7Identity.Text = "Submitted";
-                        lbl7Residence.Text = "Submitted";
-                        lbl7Financial.Text = "Submitted";
+                        if (edit.Home_Status == "Pending")
+                        {
+                            //Alert for Editing Details
+                            ClientScript.RegisterStartupScript(this.GetType(), "randomtext", "editAlert()", true);
+
+                            //GET by ID methods calling
+                            //Personal_Get_Id();
+                            //Gstin_Get_Id();
+                            //EmpEduHome_Get_Id();
+                            //Financial_Get_Id();
+                            //PropHome_Get_Id();
+                            //HomeDetails_Get_Id();
+                            //PropertyDetails_Get_Id();
+                            //Reference_Get_Id();
+                            //Declar_Get_Id();
+                            //HomeAppDoc_Get_Id();
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {

@@ -32,24 +32,39 @@ namespace MajorProjectLoanSystem
                 {
                     client.BaseAddress = new Uri("http://trustyloanapi.somee.com/api/");
 
-                    //GET Request LoanAppliedDetails by id
-                    var rT = client.GetAsync("LoanAppliedDetails/" + Convert.ToInt32(Session["USER_ID"]));
+                    //GET Request StatusHome by id
+                    var rT = client.GetAsync("StatusHome/" + Convert.ToInt32(Session["USER_ID"]));
                     rT.Wait();
 
                     var r = rT.Result;
                     if (r.IsSuccessStatusCode)
                     {
-                        //GET by ID methods calling
-                        Personal_Get_Id();
-                        Gstin_Get_Id();
-                        Nri_Get_Id();
-                        EduCourse_Get_Id();
-                        LoanEdu_Get_Id();
-                        EmpEduHome_Get_Id();
-                        Financial_Get_Id();
-                        Reference_Get_Id();
-                        Declar_Get_Id();
-                        EduAppDoc_Get_Id();
+                        var readTask = r.Content.ReadAsAsync<StatusHomeClass>();
+                        readTask.Wait();
+
+                        var edit = readTask.Result;
+
+                        if (edit.Home_Status == "Pending")
+                        {
+                            //Alert for Editing Details
+                            ClientScript.RegisterStartupScript(this.GetType(), "randomtext", "editAlert()", true);
+
+                            //GET by ID methods calling
+                            //Personal_Get_Id();
+                            //Gstin_Get_Id();
+                            //EmpEduHome_Get_Id();
+                            //Financial_Get_Id();
+                            //PropHome_Get_Id();
+                            //HomeDetails_Get_Id();
+                            //PropertyDetails_Get_Id();
+                            //Reference_Get_Id();
+                            //Declar_Get_Id();
+                            //HomeAppDoc_Get_Id();
+                        }
+                        else
+                        {
+
+                        }
                     }
                     else
                     {
